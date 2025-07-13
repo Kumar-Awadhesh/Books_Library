@@ -15,7 +15,7 @@ bookRouter.get("/books", async(req, res) => {
         const perPage = (req.query._perPage || 12)
 
         //get books and user from data base and store in the variable getbooks.
-        const getBook = await BookModel.find().populate("user");
+        const getBook = await BookModel.find();
         //return book data in response.
         return res.json({book: getBook});    
     } 

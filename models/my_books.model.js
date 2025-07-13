@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 // create books schema.
 const myBookSchema = new mongoose.Schema({
+    title: {type: String, required: true},
     status: {type: String, required: true, },
     rating: {type: Number, required: true},
     userid: {type: mongoose.Schema.Types.ObjectId, ref: "user", required: true}
