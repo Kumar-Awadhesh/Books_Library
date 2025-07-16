@@ -31,7 +31,7 @@ loginRouter.post("/userLogin", async(req, res) => {
             return res.json({msg: "failed to generate token!"});
         }
         //return login successful message and token after succesfull login.
-        return res.json({msg: "Login Successfull!", token:token});
+        return res.json({msg: "Login Successfull!", token:token, user:existUser});
     } 
     //retun any error in the process.
     catch (err) {
