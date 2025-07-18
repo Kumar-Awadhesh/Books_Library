@@ -54,7 +54,7 @@ userRouter.get("/profile", async (req, res) => {
         }
         
         //verify token wether its valid and genuine or not, and capture the value in decoded variable.
-        const decoded = jwt.verify(token, "recipe");
+        const decoded = jwt.verify(token, "my_book");
 
         //return inavalid token response when decoded is false.
         if (!decoded) {
@@ -74,16 +74,16 @@ userRouter.get("/profile", async (req, res) => {
 
         //check the user role and authorized accordingly.
         if (existUser?.role === "user") {
-            //find user by id and populate their recipe and store in getUser variable.
-            const getUser = await UserModel.findById(userid).populate("recipe");
+            //find user by id and populate their my_book and store in getUser variable.
+            const getUser = await UserModel.findById(userid).populate("my_book");
             //return getUser in response.
             return res.json({ msg: getUser });
         }
 
         //check the user role and authorized accordingly.
         else if (existUser?.role === "admin") {
-             //find user by id and populate their recipe and store in getAllUser variable.
-            const getAllUser = await UserModel.find().populate("recipe");
+             //find user by id and populate their my_book and store in getAllUser variable.
+            const getAllUser = await UserModel.find().populate("my_book");
             return res.json({ msg: getAllUser });
         }
         else {
@@ -111,7 +111,7 @@ userRouter.patch("/profileUpdate/:id", async (req, res) => {
             return res.json({ msg: "PLease Login!" })
         }
         //verify token wether its valid and genuine or not, and capture the value in decoded variable.
-        const decoded = jwt.verify(token, "recipe");
+        const decoded = jwt.verify(token, "my_book");
         //return inavalid token response when decoded is false.
         if (!decoded) {
             return res.json({ msg: "invalid token!" })
@@ -174,7 +174,7 @@ userRouter.delete("/profileDelete/:id", async (req, res) => {
             return res.json({ msg: "PLease Login!" })
         }
         //verify token wether its valid and genuine or not, and capture the value in decoded variable.
-        const decoded = jwt.verify(token, "recipe");
+        const decoded = jwt.verify(token, "my_book");
         //return inavalid token response when decoded is false.
         if (!decoded) {
             return res.json({ msg: "invalid token!" })

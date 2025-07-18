@@ -25,7 +25,7 @@ loginRouter.post("/userLogin", async(req, res) => {
             return res.json({msg: "invalid password!"});
         }
         //generate token, pass the user' id, secrate key and token expiration time.
-        const token = jwt.sign({userId: existUser._id}, "recipe", {expiresIn: "1h"});
+        const token = jwt.sign({userId: existUser._id}, "my_book", {expiresIn: "1h"});
         //return failed to generate token response when token is false.
         if(!token){
             return res.json({msg: "failed to generate token!"});
