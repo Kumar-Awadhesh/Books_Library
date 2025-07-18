@@ -8,11 +8,11 @@ const myBookRouter = express.Router();
 
 
 //asynchronous funtion to fetch the post request from front end side.
-myBookRouter.post("/add", async(req, res) => {
+myBookRouter.post("/addBook", async(req, res) => {
     //get the token from authorization if exist, and split by space to get the second element as token.
     const token = req.headers.authorization?.split(" ")[1];
     //get the name, status and rating from request body/user's input from front end side by destructure.
-    const {name, status, rating } = req.body;
+    const {title, status, rating } = req.body;
     //write the code in try and catch block to catch any errors.
     try {
          //return please login response when token is false.
@@ -34,7 +34,12 @@ myBookRouter.post("/add", async(req, res) => {
             return res.json({msg: "User not found!"});
         }
         //add new book in the book model with userid and capture in the newBook variable.
-        const newBook = await BookModel({name, status, rating, userid:userid});
+        const newBook = await BookModel({title, status, rating, userid:userid});
+        const existBook = await BookModel.findOne({title});
+        if(existBook){
+            res.json({msg: "Book Already added !"});
+            return;
+        }
         //save the book to the data base and return a confirmation message with added book.
         await newBook.save();
         return res.json({msg: "Book added Successfully!", book: newBook});
