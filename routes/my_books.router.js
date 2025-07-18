@@ -11,7 +11,7 @@ const myBookRouter = express.Router();
 myBookRouter.post("/addBook", async(req, res) => {
     //get the token from authorization if exist, and split by space to get the second element as token.
     const token = req.headers.authorization?.split(" ")[1];
-    
+
     //get the title, status and rating from request body/user's input from front end side by destructure.
     const {title, status, rating } = req.body;
     //write the code in try and catch block to catch any errors.
@@ -21,7 +21,7 @@ myBookRouter.post("/addBook", async(req, res) => {
             return res.json({msg: "PLease Login!"});
         }
         //verify token wether its valid and genuine or not, and capture the value in decoded variable.
-        const decoded = jwt.verify(token, "recipe");
+        const decoded = jwt.verify(token, "my_book");
         //return inavalid token response when decoded is false.
         if(!decoded){
             return res.json({msg: "invalid token!"});
