@@ -39,14 +39,12 @@ myBookRouter.post("/addBook", async(req, res) => {
         }
         //add new book in the book model with userid and capture in the newBook variable.
         const newBook = await BookModel({title, status, rating, userid:userid});
-<<<<<<< HEAD
+        // check if same book is already exist in data base then return response accordingly.
         const existBook = await BookModel.findOne({title});
         if(existBook){
             res.json({msg: "Book Already added !"});
             return;
         }
-=======
->>>>>>> 1d1b7d75a0406383eeeedb636356b2a2f4d76579
         //save the book to the data base and return a confirmation message with added book.
         await newBook.save();
         return res.json({msg: "Book added Successfully!", book: newBook});
