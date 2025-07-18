@@ -7,6 +7,45 @@ const { UserModel } = require("../models/user.model"); // import user model from
 const myBookRouter = express.Router();
 
 
+//asynchronous funtion to fetch the post request from front end side.
+myBookRouter.post("/add", async(req, res) => {
+    //get the token from authorization if exist, and split by space to get the second element as token.
+    const token = req.headers.authorization?.split(" ")[1];
+    //get the name, status and rating from request body/user's input from front end side by destructure.
+    const {name, status, rating } = req.body;
+    //write the code in try and catch block to catch any errors.
+    try {
+         //return please login response when token is false.
+        if(!token){
+            return res.json({msg: "PLease Login!"});
+        }
+        //verify token wether its valid and genuine or not, and capture the value in decoded variable.
+        const decoded = jwt.verify(token, "recipe");
+        //return inavalid token response when decoded is false.
+        if(!decoded){
+            return res.json({msg: "invalid token!"});
+        } 
+        //get user's id from decoded varable that is passed when token generated.
+        const userid = decoded.userId;
+        //get the existing user by their id and capture in existUser variabe.
+        const existUser = await UserModel.findById(userid);
+        //return user not found response when existUser is false.
+        if(!existUser){
+            return res.json({msg: "User not found!"});
+        }
+        //add new book in the book model with userid and capture in the newBook variable.
+        const newBook = await BookModel({name, status, rating, userid:userid});
+        //save the book to the data base and return a confirmation message with added book.
+        await newBook.save();
+        return res.json({msg: "Book added Successfully!", book: newBook});
+    } 
+    //retun any error in the process.
+    catch (err) {
+        console.log("catch error", err);
+    }
+
+})
+
 
 //asyncronous function to get book data.
 myBookRouter.get("/myBooks", async(req, res) => {
@@ -26,7 +65,7 @@ myBookRouter.get("/myBooks", async(req, res) => {
         }
 
         //verify token and store data in variable decoded.
-        const decoded = jwt.verify(token, "recipe");
+        const decoded = jwt.verify(token, "my_book");
 
         //check res with invalid token if verify fails.
         if(!decoded){
@@ -47,7 +86,7 @@ myBookRouter.get("/myBooks", async(req, res) => {
         if(existUser.role === "admin"){
             //get the exist book from book data base and populate its user and store in the variable existBook.
             const existBook = await BookModel.find().populate("user");
-            //check and return book not found response if recipe not exist.
+            //check and return book not found response if my_book not exist.
             if(!existBook){
                 return res.json({msg: "Book not found!"});
             } 
@@ -85,7 +124,7 @@ myBookRouter.patch("/bookUpdate/:id", async(req, res) => {
     // destructure id from req params.
     const {id} = req.params;
 
-    //destructure recipe info from req body.
+    //destructure my_book info from req body.
     const {status, rating} = req.body;
 
     //try and catch block to catch any errors.
@@ -95,7 +134,7 @@ myBookRouter.patch("/bookUpdate/:id", async(req, res) => {
             return res.json({msg: "Please Login!"});
         }
         //verify token and store data in variable decoded.
-        const decoded = jwt.verify(token, "recipe");
+        const decoded = jwt.verify(token, "my_book");
 
         //check res with invalid token if verify fails.
         if(!decoded){
