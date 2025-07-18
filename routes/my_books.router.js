@@ -11,11 +11,8 @@ const myBookRouter = express.Router();
 myBookRouter.post("/addBook", async(req, res) => {
     //get the token from authorization if exist, and split by space to get the second element as token.
     const token = req.headers.authorization?.split(" ")[1];
-<<<<<<< HEAD
-    //get the name, status and rating from request body/user's input from front end side by destructure.
-=======
+    
     //get the title, status and rating from request body/user's input from front end side by destructure.
->>>>>>> 1d1b7d75a0406383eeeedb636356b2a2f4d76579
     const {title, status, rating } = req.body;
     //write the code in try and catch block to catch any errors.
     try {
@@ -39,7 +36,7 @@ myBookRouter.post("/addBook", async(req, res) => {
         }
         //add new book in the book model with userid and capture in the newBook variable.
         const newBook = await BookModel({title, status, rating, userid:userid});
-        // check if same book is already exist in data base then return response accordingly.
+        // check if same book is already exist in data base then return response.
         const existBook = await BookModel.findOne({title});
         if(existBook){
             res.json({msg: "Book Already added !"});
