@@ -103,7 +103,7 @@ myBookRouter.get("/myBooks", async(req, res) => {
         //check the user role and give authority accordingly.
         if(existUser.role === "user"){
             //get the exist book from book data base and store in the variable existBook.
-            const existBook = await BookModel.find({userid});
+            const existBook = await BookModel.find({userid}).populate("user");
             //check and return book not found response if book not exist.
             if(!existBook){
                 return res.json({msg: "Book not found!"});

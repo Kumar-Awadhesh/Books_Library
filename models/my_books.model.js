@@ -10,6 +10,7 @@ const myBookSchema = new mongoose.Schema({
 },{
     // prevent the version control of application.
     versionKey: false,
+    toJSON:{virtuals:true}
 })
 
 //crate refference, user to books.
@@ -17,7 +18,7 @@ myBookSchema.virtual("user", {
     ref: "user",
     localField: "userid", //books's userid.
     foreignField: "_id", //user's id.
-    justOne: true //to show single user/object of user
+    justOne: false //to show single user/object of user
 })
 
 //create book model and export.
